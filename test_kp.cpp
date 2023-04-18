@@ -1,0 +1,149 @@
+/// 
+/// Copyright (c) 2018 Zeutro, LLC. All rights reserved.
+/// 
+/// This file is part of Zeutro's OpenABE.
+/// 
+/// OpenABE is free software: you can redistribute it and/or modify
+/// it under the terms of the GNU Affero General Public License as published by
+/// the Free Software Foundation, either version 3 of the License, or
+/// (at your option) any later version.
+/// 
+/// OpenABE is distributed in the hope that it will be useful,
+/// but WITHOUT ANY WARRANTY; without even the implied warranty of
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+/// GNU Affero General Public License for more details.
+/// 
+/// You should have received a copy of the GNU Affero General Public
+/// License along with OpenABE. If not, see <http://www.gnu.org/licenses/>.
+/// 
+/// You can be released from the requirements of the GNU Affero General
+/// Public License and obtain additional features by purchasing a
+/// commercial license. Buying such a license is mandatory if you
+/// engage in commercial activities involving OpenABE that do not
+/// comply with the open source requirements of the GNU Affero General
+/// Public License. For more information on commerical licenses,
+/// visit <http://www.zeutro.com>.
+///
+/// \brief Example use of the OpenABE API with CP-ABE
+///
+
+#include <iostream>
+#include <string>
+#include <cassert>
+#include <openabe/openabe.h>
+#include <openabe/zsymcrypto.h>
+
+using namespace std;
+using namespace oabe;
+using namespace oabe::crypto;
+
+int main(int argc, char **argv) {
+
+InitializeOpenABE();
+
+cout << "Testing CP-ABE context" << endl;
+OpenABECryptoContext cpabe("CP-ABE");
+string ct, pt1 = "hello world!", pt2;
+cpabe.generateParams();
+
+string EV1 = "|GT|Alice|E8|Pub";
+string EV2 = "|MC|Bob|E6|Pub";
+string EV3 = "|MT|Alice|E5|Con";
+string EV4 = "|GT|Bob|E4|Con";
+string EV5 = "|MC|Alice|E9|Con";
+
+string Director = "Pub or Con"
+string Alice = "Alice or (Bob and Pub)"
+string Bob = "Bob";
+
+//Director
+cout << "El director ha conseguido descifrar todas las evaluaciones";
+cpabe.keygen(Director, "key_director");
+
+cpabe.encrypt(EV1, pt1, ct);
+bool result = cpabe.decrypt("key_director", ct, pt2);
+assert(result && pt1 == pt2);
+cout << "Recovered message: " << pt2 << endl;
+
+cpabe.encrypt(EV2, pt1, ct);
+bool result = cpabe.decrypt("key_director", ct, pt2);
+assert(result && pt1 == pt2);
+cout << "Recovered message: " << pt2 << endl;
+
+cpabe.encrypt(EV3, pt1, ct);
+bool result = cpabe.decrypt("key_director", ct, pt2);
+assert(result && pt1 == pt2);
+cout << "Recovered message: " << pt2 << endl;
+
+cpabe.encrypt(EV4, pt1, ct);
+bool result = cpabe.decrypt("key_director", ct, pt2);
+assert(result && pt1 == pt2);
+cout << "Recovered message: " << pt2 << endl;
+
+cpabe.encrypt(EV5, pt1, ct);
+bool result = cpabe.decrypt("key_director", ct, pt2);
+assert(result && pt1 == pt2);
+cout << "Recovered message: " << pt2 << endl;
+
+//Alice
+cout << "Alice ha conseguido descrifrar estas evaluaciones: EV1, EV2, EV3 y EV5";
+cpabe.keygen(Alice, "key_alice");
+
+cpabe.encrypt(EV1, pt1, ct);
+bool result = cpabe.decrypt("key_alice", ct, pt2);
+assert(result && pt1 == pt2);
+cout << "Recovered message: " << pt2 << endl;
+
+cpabe.encrypt(EV2, pt1, ct);
+bool result = cpabe.decrypt("key_alice", ct, pt2);
+assert(result && pt1 == pt2);
+cout << "Recovered message: " << pt2 << endl;
+
+cpabe.encrypt(EV3, pt1, ct);
+bool result = cpabe.decrypt("key_alice", ct, pt2);
+assert(result && pt1 == pt2);
+cout << "Recovered message: " << pt2 << endl;
+
+cpabe.encrypt(EV4, pt1, ct);
+bool result = cpabe.decrypt("key_alice", ct, pt2);
+assert(result && pt1 == pt2);
+cout << "Recovered message: " << pt2 << endl;
+
+cpabe.encrypt(EV5, pt1, ct);
+bool result = cpabe.decrypt("key_alice", ct, pt2);
+assert(result && pt1 == pt2);
+cout << "Recovered message: " << pt2 << endl;
+
+//Bob
+cout << "Bob ha conseguido descifrar estas evaluaciones: EV2, EV4";
+cpabe.keygen(Bob, "key_bob");
+
+cpabe.encrypt(EV1, pt1, ct);
+bool result = cpabe.decrypt("key_bob", ct, pt2);
+assert(result && pt1 == pt2);
+cout << "Recovered message: " << pt2 << endl;
+
+cpabe.encrypt(EV2, pt1, ct);
+bool result = cpabe.decrypt("key_bob", ct, pt2);
+assert(result && pt1 == pt2);
+cout << "Recovered message: " << pt2 << endl;
+
+cpabe.encrypt(EV3, pt1, ct);
+bool result = cpabe.decrypt("key_bob", ct, pt2);
+assert(result && pt1 == pt2);
+cout << "Recovered message: " << pt2 << endl;
+
+cpabe.encrypt(EV4, pt1, ct);
+bool result = cpabe.decrypt("key_bob", ct, pt2);
+assert(result && pt1 == pt2);
+cout << "Recovered message: " << pt2 << endl;
+
+cpabe.encrypt(EV5, pt1, ct);
+bool result = cpabe.decrypt("key_bob", ct, pt2);
+assert(result && pt1 == pt2);
+cout << "Recovered message: " << pt2 << endl;
+
+ShutdownOpenABE();
+
+return 0;
+}
