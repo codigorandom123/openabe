@@ -10,7 +10,7 @@
 /// 
 /// OpenABE is distributed in the hope that it will be useful,
 /// but WITHOUT ANY WARRANTY; without even the implied warranty of
-/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+/// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 /// GNU Affero General Public License for more details.
 /// 
 /// You should have received a copy of the GNU Affero General Public
@@ -24,7 +24,7 @@
 /// Public License. For more information on commerical licenses,
 /// visit <http://www.zeutro.com>.
 ///
-/// \brief Example use of the OpenABE API with CP-ABE
+/// \brief  Example use of the OpenABE API with CP-ABE
 ///
 
 #include <iostream>
@@ -39,43 +39,41 @@ using namespace oabe::crypto;
 
 int main(int argc, char **argv) {
 
-InitializeOpenABE();
+  InitializeOpenABE();
 
-cout << "Testing CP-ABE context" << endl;
-OpenABECryptoContext cpabe("CP-ABE");
-string ct, pt1 = "hello world!", pt2;
-cpabe.generateParams();
+  cout << "Testing CP-ABE context" << endl;
+  OpenABECryptoContext cpabe("CP-ABE");
+  string ct, pt1 = "hello world!", pt2;
+  cpabe.generateParams();
 
-string access_policy = "Me or (Fi and P5) or (Fa and ((P5 and Cru) or (P5 and Ped) or (Cru and Ped)))";
-string Bob = "|Me|P4|Cru|Pet";
-string Charlie = "Fa|P4|Cru|Hem";
-string Diana = "|Fa|P5|Ba|Ped";
+  string access_policy = "Me or (Fi and P5) or (Fa and ((P5 and Cru) or (P5 and Ped) or (Cru and Ped)))";
+  string Bob = "|Me|P4|Cru|Pet";
+  string Charlie = "Fa|P4|Cru|Hem";
+  string Diana = "|Fa|P5|Ba|Ped";
 
-//Bob
-cout << "Bob consigue descifrar la información";
-cpabe.keygen(Bob, "key_bob");
-cpabe.encrypt(access_policy, pt1, ct);
-bool result = cpabe.decrypt("key_bob", ct, pt2);
-assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+  //Bob
+  cpabe.keygen(Bob, "key_bob");
+  cpabe.encrypt(access_policy, pt1, ct);
+  bool result = cpabe.decrypt("key_bob", ct, pt2);
+  assert(result && pt1 == pt2);
+  cout << "Bob consigue descifrar la información - \n";
+  cout << "Recovered message: " << pt2 << endl;
 
-//Charlie
-cout << "Charlie no consigue descifrar la información";
-cpabe.keygen(Charlie, "key_charlie");
-cpabe.encrypt(access_policy, pt1, ct);
-result = cpabe.decrypt("key_charlie", ct, pt2);
-assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+  //Charlie
+  cpabe.keygen(Charlie, "key_charlie");
+  cpabe.encrypt(access_policy, pt1, ct);
+  cpabe.decrypt("key_charlie", ct, pt2);
+  cout << "Charlie no consigue descifrar la información - \n";
 
-//Diana
-cout << "Diana consigue descifrar la información";
-cpabe.keygen(Diana, "key_diana");
-cpabe.encrypt(access_policy, pt1, ct);
-result = cpabe.decrypt("key_diana", ct, pt2);
-assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+  //Diana
+  cpabe.keygen(Diana, "key_diana");
+  cpabe.encrypt(access_policy, pt1, ct);
+  result = cpabe.decrypt("key_diana", ct, pt2);
+  assert(result && pt1 == pt2);
+  cout << "Diana consigue descifrar la información - \n";
+  cout << "Recovered message: " << pt2 << endl;
 
-ShutdownOpenABE();
+  ShutdownOpenABE();
 
-return 0;
+  return 0;
 }
