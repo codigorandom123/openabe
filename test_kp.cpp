@@ -42,9 +42,9 @@ int main(int argc, char **argv) {
 InitializeOpenABE();
 
 cout << "Testing CP-ABE context" << endl;
-OpenABECryptoContext cpabe("CP-ABE");
+OpenABECryptoContext kpabe("KP-ABE");
 string ct, pt1 = "hello world!", pt2;
-cpabe.generateParams();
+kpabe.generateParams();
 
 string EV1 = "|GT|Alice|E8|Pub";
 string EV2 = "|MC|Bob|E6|Pub";
@@ -52,96 +52,92 @@ string EV3 = "|MT|Alice|E5|Con";
 string EV4 = "|GT|Bob|E4|Con";
 string EV5 = "|MC|Alice|E9|Con";
 
-string Director = "Pub or Con"
-string Alice = "Alice or (Bob and Pub)"
+string Director = "Pub or Con";
+string Alice = "Alice or (Bob and Pub)";
 string Bob = "Bob";
 
 //Director
-cout << "El director ha conseguido descifrar todas las evaluaciones";
-cpabe.keygen(Director, "key_director");
+cout << "El director ha conseguido descifrar todas las evaluaciones \n";
+kpabe.keygen(Director, "key_director");
 
-cpabe.encrypt(EV1, pt1, ct);
-bool result = cpabe.decrypt("key_director", ct, pt2);
+kpabe.encrypt(EV1, pt1, ct);
+bool result = kpabe.decrypt("key_director", ct, pt2);
 assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+cout << "EV1 Recovered message: " << pt2 << endl;
 
-cpabe.encrypt(EV2, pt1, ct);
-bool result = cpabe.decrypt("key_director", ct, pt2);
+kpabe.encrypt(EV2, pt1, ct);
+result = kpabe.decrypt("key_director", ct, pt2);
 assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+cout << "EV2 Recovered message: " << pt2 << endl;
 
-cpabe.encrypt(EV3, pt1, ct);
-bool result = cpabe.decrypt("key_director", ct, pt2);
+kpabe.encrypt(EV3, pt1, ct);
+result = kpabe.decrypt("key_director", ct, pt2);
 assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+cout << "EV3 Recovered message: " << pt2 << endl;
 
-cpabe.encrypt(EV4, pt1, ct);
-bool result = cpabe.decrypt("key_director", ct, pt2);
+kpabe.encrypt(EV4, pt1, ct);
+result = kpabe.decrypt("key_director", ct, pt2);
 assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+cout << "EV4 Recovered message: " << pt2 << endl;
 
-cpabe.encrypt(EV5, pt1, ct);
-bool result = cpabe.decrypt("key_director", ct, pt2);
+kpabe.encrypt(EV5, pt1, ct);
+result = kpabe.decrypt("key_director", ct, pt2);
 assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+cout << "EV5 Recovered message: " << pt2 << endl;
 
 //Alice
-cout << "Alice ha conseguido descrifrar estas evaluaciones: EV1, EV2, EV3 y EV5";
-cpabe.keygen(Alice, "key_alice");
+cout << "\n Alice ha conseguido descrifrar estas evaluaciones: EV1, EV2, EV3 y EV5 \n";
+kpabe.keygen(Alice, "key_alice");
 
-cpabe.encrypt(EV1, pt1, ct);
-bool result = cpabe.decrypt("key_alice", ct, pt2);
+kpabe.encrypt(EV1, pt1, ct);
+result = kpabe.decrypt("key_alice", ct, pt2);
 assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+cout << "EV1 Recovered message: " << pt2 << endl;
 
-cpabe.encrypt(EV2, pt1, ct);
-bool result = cpabe.decrypt("key_alice", ct, pt2);
+kpabe.encrypt(EV2, pt1, ct);
+result = kpabe.decrypt("key_alice", ct, pt2);
 assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+cout << "EV2 Recovered message: " << pt2 << endl;
 
-cpabe.encrypt(EV3, pt1, ct);
-bool result = cpabe.decrypt("key_alice", ct, pt2);
+kpabe.encrypt(EV3, pt1, ct);
+result = kpabe.decrypt("key_alice", ct, pt2);
 assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+cout << "EV3 Recovered message: " << pt2 << endl;
 
-cpabe.encrypt(EV4, pt1, ct);
-bool result = cpabe.decrypt("key_alice", ct, pt2);
-assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+kpabe.encrypt(EV4, pt1, ct);
+result = kpabe.decrypt("key_alice", ct, pt2);
+cout << "EV4 Could not recover the message \n";
 
-cpabe.encrypt(EV5, pt1, ct);
-bool result = cpabe.decrypt("key_alice", ct, pt2);
+kpabe.encrypt(EV5, pt1, ct);
+result = kpabe.decrypt("key_alice", ct, pt2);
 assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+cout << "EV5 Recovered message:" << pt2 << endl;
 
 //Bob
-cout << "Bob ha conseguido descifrar estas evaluaciones: EV2, EV4";
-cpabe.keygen(Bob, "key_bob");
+cout << " \n Bob ha conseguido descifrar estas evaluaciones: EV2, EV4 \n";
+kpabe.keygen(Bob, "key_bob");
 
-cpabe.encrypt(EV1, pt1, ct);
-bool result = cpabe.decrypt("key_bob", ct, pt2);
-assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+kpabe.encrypt(EV1, pt1, ct);
+result = kpabe.decrypt("key_bob", ct, pt2);
+cout << "EV1 Could not recover the message \n";
 
-cpabe.encrypt(EV2, pt1, ct);
-bool result = cpabe.decrypt("key_bob", ct, pt2);
+kpabe.encrypt(EV2, pt1, ct);
+result = kpabe.decrypt("key_bob", ct, pt2);
 assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+cout << "EV2 Recovered message: " << pt2 << endl;
 
-cpabe.encrypt(EV3, pt1, ct);
-bool result = cpabe.decrypt("key_bob", ct, pt2);
-assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+kpabe.encrypt(EV3, pt1, ct);
+result = kpabe.decrypt("key_bob", ct, pt2);
+cout << "EV3 Could not recover the message \n";
 
-cpabe.encrypt(EV4, pt1, ct);
-bool result = cpabe.decrypt("key_bob", ct, pt2);
+kpabe.encrypt(EV4, pt1, ct);
+result = kpabe.decrypt("key_bob", ct, pt2);
 assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+cout << "EV4 Recovered message: " << pt2 << endl;
 
-cpabe.encrypt(EV5, pt1, ct);
-bool result = cpabe.decrypt("key_bob", ct, pt2);
-assert(result && pt1 == pt2);
-cout << "Recovered message: " << pt2 << endl;
+kpabe.encrypt(EV5, pt1, ct);
+result = kpabe.decrypt("key_bob", ct, pt2);
+cout << "EV5 Could not recover the message \n \n";
 
 ShutdownOpenABE();
 
